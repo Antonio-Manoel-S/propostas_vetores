@@ -1,12 +1,3 @@
 link do site onde está o postgresql do arquivo
 https://console.neon.tech
 
-Versão Github do POC eleicoes que fiz na LED, adaptando do COLAB, onde deixei preservado
-em uma pasta dedicada.
-
-Adendo: tive que converter para .parquet, o formato excel tem limite de dados por celula.
-
-Adendo 2: Antes tava com a ideia de contornar o fato do pandas só guardar em cache
-os arquivos que alterou, e tentar guardar na pasta sobrescrevendo o arquivo original, 
-mas é até melhor gerar o arquivo em cache no mesmo codigo e já fazer update da tabela em
-sql, do que gerar a nova versão em um arquivo só para ler de novo.
