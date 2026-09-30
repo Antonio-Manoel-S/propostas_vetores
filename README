@@ -1,3 +1,11 @@
+Este repositório é um projeto de RAG (Retrieval-Augmented Generation)
+onde é analisado um banco de dados extraído das
+propostas dos candidatos nas eleições do Brasil em 2026.
+
+Cada proposta foi separada em Chunks com metadados de cada candidato,
+de onde foi tirado, partido, etc.
+E nesse projeto foi gerado os Embeddings de cada proposta.
+ 
 link do site onde está o postgresql do arquivo
 https://console.neon.tech
 
