@@ -1,3 +1,5 @@
+#-----------instalacao do vetor
+
 import pandas as pd
 import os
 import psycopg2
@@ -7,8 +9,6 @@ DB_URI = os.getenv("NEONTECH")
 
 conn = psycopg2.connect(DB_URI)
 cur = conn.cursor()
-
-#-----------instalacao do vetor
 
 cur.execute("CREATE EXTENSION IF NOT EXISTS vector;")
 register_vector(conn)
@@ -114,3 +114,4 @@ execute_values(cur, query_insert, valores)
 conn.commit()
 
 #-----------INSERT da tabela parquet em cache
+

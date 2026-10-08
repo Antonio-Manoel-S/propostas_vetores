@@ -18,7 +18,7 @@ conn.rollback()
 
 #LOCAL IMPUT------------------------------------------------
 
-pergunta = "melhoria da segurança publica"
+pergunta = "melhoria para a universidade"
 #pergunta
 
 #LOCAL IMPUT------------------------------------------------

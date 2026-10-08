@@ -1,11 +1,60 @@
-Este repositório é um projeto de RAG (Retrieval-Augmented Generation)
-onde é analisado um banco de dados extraído das
-propostas dos candidatos nas eleições do Brasil em 2026.
+Este repositório é um projeto de RAG (Retrieval-Augmented Generation) desenvolvido na LED,
+onde é analisado um banco de dados extraído das propostas dos candidatos 
+nas eleições do Brasil em 2026. Fiz parte da equipe de Retrieval, RAG & Semantic Analysis
 
-Cada proposta foi separada em Chunks com metadados de cada candidato,
+Cada proposta foi separada em Chunks com metadados de cada candidato, com dados
 de onde foi tirado, partido, etc.
 E nesse projeto foi gerado os Embeddings de cada proposta.
- 
+
+GOLD_PROPOSALS.xlsx 
+
+É onde está armazenado as propostas dos candidatos, extraído através de trabalho manual de 
+outra equipe. Peguei especificamente a coluna de "source_excerpt" onde fica o trecho 
+completo para gerar Embeddings.
+
+conversaoParquet.py
+
+É um código dedicado a converter o arquivo XLSX em .parquet, por conta que as colunas
+tem uma capacidade bem maior de armazenamento de caracteres. Os Embeddings podem ficar
+gigantescos, ultrapassando o limite de coluna do Excel.
+
+postgreesql.py
+
+É um único código com quatro etapas:
+
+1.instalacao do Vetor
+Aqui começa importando pandas, módulo OS, e psycopg2, e o
+submódulo register_vector, para que boa parte das seguintes linhas possa ser executada
+sem problemas.
+Aqui é instalada a extensão Vector, onde possibilita a criação de uma coluna de
+Vetores no servidor sql, onde eu hopspedei no site Neon Tech, que hospeda gratuitamente
+com AWS(Amazon Web Services)
+
 link do site onde está o postgresql do arquivo
 https://console.neon.tech
 
+2. criacao da tabela no postgree
+
+Aqui é criada a tabela com base na leitura do arquivo Parquet, onde é atribuido as 
+colunas de forma automatizada e criada o vetor com a dimensão de 3072, que é o formato
+que o gemini-embedding-001 suporta. 
+
+3. criacao dos embeddings em cache
+
+Atríbui a chave do API Gemini da minha conta, que usa a versão gratuita, e gerei os 
+embeddings de cada linha na coluna que escolhi, "source_excerpt". 
+Quero enfatizar que o pandas cria essa coluna dentro do cache, não substitui auto
+o arquivo, só fica dentro do cache do código até o fim. E por isso, decidi fazer parte
+do código todo para que esse cache vá para o servidor Sql.
+
+4. INSERT da tabela parquet em cache
+
+Importei um submódulo chamado execute_values e o numpy, para que possa
+ler as colunas e executar numa função que leia toda a tabela e faça o INSERT.
+
+
+busca.py 
+
+é um código que se conecta ao SQL na nuvem com os dados que enviei e faz a 
+pesquisa do vetor da pergunta escolhida, fazendo um retorno das linhas(propostas)
+que mais tem semelhança nas palavras, mas não necessariamente concordando entre si.
