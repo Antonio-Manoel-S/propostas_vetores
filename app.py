@@ -1,6 +1,6 @@
 import os
 import psycopg2
-from flask import Flask, jsonify, render_template, request
+from flask import Flask, jsonify, request
 from google import genai
 from flask_cors import CORS
 
@@ -19,9 +19,7 @@ def get_db_connection():
 
 @app.route("/")
 def index():
-  # Renderiza a página HTML principal
-  return render_template("index.html")
-
+  return jsonify({"status": "ok"})
 
 @app.route("/search", methods=["POST"])
 def search():
