@@ -1,6 +1,6 @@
 #pip install -r requirements.txt
 
-# Exemplo de consulta buscando os 3 itens mais parecidos com um vetor de busca
+# Exemplo de consulta buscando os 5 itens mais parecidos com um vetor de busca
 import psycopg2
 import os
 from google import genai
@@ -18,7 +18,7 @@ conn.rollback()
 
 #LOCAL IMPUT------------------------------------------------
 
-pergunta = "melhoria para a universidade"
+pergunta = input('Digite sua pergunta:')
 #pergunta
 
 #LOCAL IMPUT------------------------------------------------
@@ -38,7 +38,7 @@ cur.execute(
     SELECT chunk_id, source_excerpt, 1 - (embeddings <=> %s::vector) AS pontuacao_similaridade
     FROM documentos
     ORDER BY embeddings <=> %s::vector
-    LIMIT 3;
+    LIMIT 5;
     """,
     (vetor_da_busca, vetor_da_busca)
 )

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Busca Semântica com Gemini e Postgres</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 700px; margin: 40px auto; padding: 0 20px; background-color: #f4f7f6; }
+        h2 { color: #333; }
+        .search-box { display: flex; gap: 10px; margin-bottom: 20px; }
+        input[type="text"] { flex: 1; padding: 12px; font-size: 16px; border: 1px solid #ccc; border-radius: 6px; }
+        button { padding: 12px 20px; font-size: 16px; background-color: #007bff; color: white; border: none; border-radius: 6px; cursor: pointer; }
+        button:hover { background-color: #0056b3; }
+        .loading { color: #666; font-style: italic; display: none; }
+        .result-card { background: white; border: 1px solid #ddd; padding: 15px; margin-bottom: 15px; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .meta { font-size: 13px; color: #555; margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+
+    <h2>Busca Inteligente de Documentos</h2>
+    
+    <div class="search-box">
+        <input type="text" id="perguntaInput" placeholder="Digite sua pergunta..." onkeypress="handleKeyPress(event)">
+        <button onclick="realizarBusca()">Pesquisar</button>
+    </div>
+
+    <div id="loading" class="loading">Buscando os itens mais parecidos...</div>
+    <div id="resultadosContainer"></div>
+
+    <script>
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                realizarBusca();
+            }
+        }
+
+        async function realizarBusca() {
+            const pergunta = document.getElementById('perguntaInput').value;
+            const container = document.getElementById('resultadosContainer');
+            const loading = document.getElementById('loading');
+            
+            if (!pergunta.trim()) return;
+
+            container.innerHTML = '';
+            loading.style.display = 'block';
+
+            try {
+                const response = await fetch('/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pergunta: pergunta })
+                });
+
+                const dados = await response.json();
+                loading.style.display = 'none';
+
+                if (response.ok) {
+                    if (dados.length === 0) {
+                        container.innerHTML = '<p>Nenhum resultado encontrado.</p>';
+                        return;
+                    }
+
+                    dados.forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = 'result-card';
+                        card.innerHTML = `
+                            <div class="meta"><strong>Chunk ID:</strong> ${item.chunk_id} | <strong>Similaridade:</strong> ${item.similaridade}</div>
+                            <p>${item.texto}</p>
+                        `;
+                        container.appendChild(card);
+                    });
+                } else {
+                    container.innerHTML = `<p style="color: red;">Erro: ${dados.error}</p>`;
+                }
+            } catch (error) {
+                loading.style.display = 'none';
+                container.innerHTML = `<p style="color: red;">Erro de conexão com o servidor.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

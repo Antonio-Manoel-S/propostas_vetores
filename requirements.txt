@@ -4,3 +4,6 @@ pgvector>=0.2.0
 openpyxl>=3.1.0
 google-genai
 pyarrow
+flask
+gunicorn
+flask-cors
