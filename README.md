@@ -37,7 +37,10 @@ O script `postgreesql.py` reúne as etapas de preparação e armazenamento:
 - `postgreesql.py`: prepara a tabela, gera os embeddings e envia os dados ao PostgreSQL.
 - `busca.py`: conecta ao banco e busca as propostas mais semelhantes semanticamente à
   pergunta informada. Similaridade não significa que as propostas concordem entre si.
+- `app.py`: Versão de busca aprimorada que se conecta ao frontend em HTML.
+- `index.html`: Frontend onde é feita a busca de forma prática.
 
 ## Banco de dados
 
 O PostgreSQL é hospedado na [Neon](https://console.neon.tech/).
+O esse projeto está com backend hospedado em [render]https://dashboard.render.com/
