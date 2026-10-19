@@ -43,4 +43,4 @@ O script `postgreesql.py` reúne as etapas de preparação e armazenamento:
 ## Banco de dados
 
 O PostgreSQL é hospedado na [Neon](https://console.neon.tech/).
-O esse projeto está com backend hospedado em [render]https://dashboard.render.com/
+O esse projeto está com backend hospedado em [Render](https://dashboard.render.com/)
